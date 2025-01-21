@@ -1,15 +1,17 @@
 import { useState } from "react";
 
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
-  { id: 3, description: "Charger", quantity: 1, packed: true },
-];
-
 const App = () => {
   const [items, setItems] = useState([]);
   const handleAddItems = (item) => {
     setItems((items) => [...items, item]);
+  };
+
+  const handleTogglePacked = (id) => {
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
   };
 
   const handleDeleteItem = (id) => {
@@ -19,7 +21,11 @@ const App = () => {
     <div className="app">
       <Logo />
       <Form onAdditems={handleAddItems} />
-      <PackingItems items={items} onDeleteItems={handleDeleteItem} />
+      <PackingItems
+        items={items}
+        onDeleteItems={handleDeleteItem}
+        onTogglePacked={handleTogglePacked}
+      />
       <Progess items={items} />
     </div>
   );
@@ -73,21 +79,27 @@ const Form = ({ onAdditems }) => {
   );
 };
 
-const PackingItems = ({ items, onDeleteItems }) => {
+const PackingItems = ({ items, onDeleteItems, onTogglePacked }) => {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item} key={item.id} onDeleteItems={onDeleteItems} />
+          <Item
+            item={item}
+            key={item.id}
+            onDeleteItems={onDeleteItems}
+            onTogglePacked={onTogglePacked}
+          />
         ))}
       </ul>
     </div>
   );
 };
 
-const Item = ({ item, onDeleteItems }) => {
+const Item = ({ item, onDeleteItems, onTogglePacked }) => {
   return (
     <li>
+      <button onClick={() => onTogglePacked(item.id)}>✅</button>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
