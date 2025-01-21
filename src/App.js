@@ -8,14 +8,19 @@ const initialItems = [
 
 const App = () => {
   const [items, setItems] = useState([]);
-  const handleAddItems = (item) => setItems((items) => [...items, item]);
+  const handleAddItems = (item) => {
+    setItems((items) => [...items, item]);
+  };
 
+  const handleDeleteItem = (id) => {
+    setItems((items) => items.filter((item) => item.id !== id));
+  };
   return (
     <div className="app">
       <Logo />
       <Form onAdditems={handleAddItems} />
-      <PackingItems items={items} />
-      <Progess items={initialItems} />
+      <PackingItems items={items} onDeleteItems={handleDeleteItem} />
+      <Progess items={items} />
     </div>
   );
 };
@@ -68,25 +73,25 @@ const Form = ({ onAdditems }) => {
   );
 };
 
-const PackingItems = ({ items }) => {
+const PackingItems = ({ items, onDeleteItems }) => {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item} key={item.id} />
+          <Item item={item} key={item.id} onDeleteItems={onDeleteItems} />
         ))}
       </ul>
     </div>
   );
 };
 
-const Item = ({ item }) => {
+const Item = ({ item, onDeleteItems }) => {
   return (
     <li>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItems(item.id)}>❌</button>
     </li>
   );
 };
