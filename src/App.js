@@ -7,11 +7,14 @@ const initialItems = [
 ];
 
 const App = () => {
+  const [items, setItems] = useState([]);
+  const handleAddItems = (item) => setItems((items) => [...items, item]);
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingItems items={initialItems} />
+      <Form onAdditems={handleAddItems} />
+      <PackingItems items={items} />
       <Progess items={initialItems} />
     </div>
   );
@@ -21,7 +24,7 @@ const Logo = () => {
   return <h1> 🌴GET SET GO🎒</h1>;
 };
 
-const Form = () => {
+const Form = ({ onAdditems }) => {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -32,6 +35,7 @@ const Form = () => {
 
     const newItem = { description, quantity, packed: false, id: Date.now() };
     console.log(newItem);
+    onAdditems(newItem);
 
     setDescription("");
     setQuantity(1);
