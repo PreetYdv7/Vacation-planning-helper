@@ -17,6 +17,10 @@ const App = () => {
   const handleDeleteItem = (id) => {
     setItems((items) => items.filter((item) => item.id !== id));
   };
+
+  const handleClearList = () => {
+    setItems([]);
+  };
   return (
     <div className="app">
       <Logo />
@@ -25,6 +29,7 @@ const App = () => {
         items={items}
         onDeleteItems={handleDeleteItem}
         onTogglePacked={handleTogglePacked}
+        onClearList={handleClearList}
       />
       <Progess items={items} />
     </div>
@@ -79,7 +84,12 @@ const Form = ({ onAdditems }) => {
   );
 };
 
-const PackingItems = ({ items, onDeleteItems, onTogglePacked }) => {
+const PackingItems = ({
+  items,
+  onDeleteItems,
+  onTogglePacked,
+  onClearList,
+}) => {
   const [sortBy, setSortBy] = useState("input");
 
   let sortedItems;
@@ -112,6 +122,9 @@ const PackingItems = ({ items, onDeleteItems, onTogglePacked }) => {
           <option value="description">Sort by description</option>
           <option value="packed">Sort by packed status</option>
         </select>
+        <button className="clear-btn" onClick={() => onClearList(items)}>
+          Clear list
+        </button>
       </div>
     </div>
   );
